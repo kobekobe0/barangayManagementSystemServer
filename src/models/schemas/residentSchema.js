@@ -86,6 +86,10 @@ const residentSchema = new Schema({
         type: Date,
         required: true,
     },
+    blocked: {
+        type: Schema.Types.ObjectId,
+        ref: "BlockedLog",
+    },
 });
 
 export default residentSchema;

@@ -1,13 +1,9 @@
 import { Schema } from "mongoose";
 
-const barangayClearanceSchema = new Schema({
+const zoningClearanceSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
         ref: "Resident",
-        required: true,
-    },
-    purpose: {
-        type: String,
         required: true,
     },
     dateIssued: {
@@ -21,16 +17,25 @@ const barangayClearanceSchema = new Schema({
     },
     ORNo: {
         type: String,
-        required: true,
     },
     CTCNo: {
         type: String,
-        required: true,
     },
     clearanceNumber: {
         type: String,
-        required: true,
+    },
+    location: {
+        type: String,
+    },
+    vehicle: {
+        type: String,
+    },
+    plate: {
+        type: String,
+    },
+    name: {
+        type: String,
     },
 });
 
-export default barangayClearanceSchema;
+export default zoningClearanceSchema;

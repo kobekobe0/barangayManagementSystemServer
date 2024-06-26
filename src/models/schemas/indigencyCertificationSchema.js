@@ -8,6 +8,8 @@ const indigencyCertificationSchema = new Schema({
     },
     dateIssued: {
         type: Date,
+        required: true,
+        default: Date.now()
     },
     placeIssued: {
         type: String,

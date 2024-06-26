@@ -14,6 +14,7 @@ const ITRExemptionSchema = new Schema({
     },
     dateIssued: {
         type: Date,
+        default: Date.now()
     },
     placeIssued: {
         type: String,

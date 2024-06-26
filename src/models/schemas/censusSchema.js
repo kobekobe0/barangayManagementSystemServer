@@ -48,7 +48,11 @@ const censusSchema = new Schema({
     businessName: String,
     ORNo: String,
     CTCNo: String,
-    dateIssued: Date,
+    dateIssued: {
+        type: Date,
+        required: true,
+        default: Date.now(),
+    },
 });
 
 export default censusSchema;
