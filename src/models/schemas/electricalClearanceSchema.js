@@ -25,7 +25,7 @@ const electricalClearanceSchema = new Schema({
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     },
     placeIssued: {
         type: String,

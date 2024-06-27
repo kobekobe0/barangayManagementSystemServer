@@ -25,7 +25,7 @@ const businessClearanceSchema = new Schema({
     },
     dateIssued: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     placeIssued: {
         type: String,

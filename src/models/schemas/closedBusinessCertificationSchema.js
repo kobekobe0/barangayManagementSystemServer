@@ -1,31 +1,32 @@
 import { Schema } from "mongoose";
 
-const buildingClearanceSchema = new Schema({
-    residentID: {
+const closedBusinessCertificationSchema = new Schema({
+    residentId: {
         type: Schema.Types.ObjectId,
         ref: "Resident",
         required: true,
     },
-    addressNo: {
+    //fk to business clearance
+    businessClearanceId: {
+        type: Schema.Types.ObjectId,
+        ref: "BusinessClearance",
+    },
+    businessName: {
         type: String,
         required: true,
     },
-    location: {
+    businessAddress: {
         type: String,
         required: true,
     },
-    titleNo: {
-        type: String,
-        required: true,
-    },
-    CTCNo: {
-        type: String,
+    dateClosed: {
+        type: Date,
         required: true,
     },
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now,
     },
     placeIssued: {
         type: String,
@@ -33,12 +34,13 @@ const buildingClearanceSchema = new Schema({
     },
     ORNo: {
         type: String,
-        required: true,
     },
-    clearanceNumber: {
+    CTCNo: {
         type: String,
-        required: true,
+    },
+    certificationNumber: {
+        type: String,
     },
 });
 
-export default buildingClearanceSchema;
+export default closedBusinessCertificationSchema;

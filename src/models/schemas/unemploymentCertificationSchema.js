@@ -1,31 +1,23 @@
 import { Schema } from "mongoose";
 
-const buildingClearanceSchema = new Schema({
+const unemploymentCertificationSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
-        ref: "Resident",
         required: true,
+        ref: "Resident"
     },
-    addressNo: {
+    previousEmployment: {
         type: String,
         required: true,
     },
-    location: {
-        type: String,
-        required: true,
-    },
-    titleNo: {
-        type: String,
-        required: true,
-    },
-    CTCNo: {
-        type: String,
+    dateLastEmployed: {
+        type: Date,
         required: true,
     },
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now,
     },
     placeIssued: {
         type: String,
@@ -33,12 +25,13 @@ const buildingClearanceSchema = new Schema({
     },
     ORNo: {
         type: String,
-        required: true,
     },
-    clearanceNumber: {
+    CTCNo: {
         type: String,
-        required: true,
     },
+    certificationNumber: {
+        type: String,
+    }
 });
 
-export default buildingClearanceSchema;
+export default unemploymentCertificationSchema;

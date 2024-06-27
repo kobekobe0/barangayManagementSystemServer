@@ -1,15 +1,15 @@
 import { Schema } from "mongoose";
 
-const TODACertificationSchema = new Schema({
+const employmentClearanceSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
-        ref: "Resident",
         required: true,
+        ref: "Resident"
     },
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now,
     },
     placeIssued: {
         type: String,
@@ -21,31 +21,18 @@ const TODACertificationSchema = new Schema({
     CTCNo: {
         type: String,
     },
-    certificationNumber: {
-        type: String,
-    },
-
-    modelYear: {
+    company: {
         type: String,
         required: true,
     },
-    motorNo: {
+    location: {
         type: String,
         required: true,
     },
-    chassisNo: {
+    purpose: {
         type: String,
         required: true,
-    },
-    numberOfUnits: {
-        type: Number,
-        required: true,
-    },
-    income: {
-        type: Number,
-        required: true,
-    },
-
+    }
 });
 
-export default TODACertificationSchema;
+export default employmentClearanceSchema;

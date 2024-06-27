@@ -1,18 +1,19 @@
 import { Schema } from "mongoose";
 
-const indigencyCertificationSchema = new Schema({
+const medicalCertificationSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
-        ref: "Resident",
         required: true,
+        ref: "Resident"
     },
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now,
     },
     placeIssued: {
         type: String,
+        required: true,
     },
     ORNo: {
         type: String,
@@ -22,16 +23,7 @@ const indigencyCertificationSchema = new Schema({
     },
     certificationNumber: {
         type: String,
-    },
-    relations: {
-        type: String,
-    },
-    purpose: {
-        type: String,
-    },
-    beneficiary: {
-        type: String,
-    },
+    }
 });
 
-export default indigencyCertificationSchema;
+export default medicalCertificationSchema;

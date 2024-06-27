@@ -1,12 +1,16 @@
 import { Schema } from "mongoose";
 
-const fencingClearanceSchema = new Schema({
+const solidWasteDisposalSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
-        ref: "Resident",
         required: true,
+        ref: "Resident"
     },
-    addressNo: {
+    businessClearanceId: {
+        type: Schema.Types.ObjectId,
+        ref: "BusinessClearance",
+    },
+    businessName: {
         type: String,
         required: true,
     },
@@ -14,27 +18,24 @@ const fencingClearanceSchema = new Schema({
         type: String,
         required: true,
     },
-    CTCNo: {
-        type: String,
-        required: true,
-    },
     dateIssued: {
         type: Date,
         required: true,
-        default: Date.now
-    },
-    placeIssued: {
-        type: String,
-        required: true,
+        default: Date.now,
     },
     ORNo: {
         type: String,
-        required: true,
     },
-    clearanceNumber: {
+    CTCNo: {
         type: String,
-        required: true,
+    },
+    certificationNumber: {
+        type: String,
+    },
+    CTCNo: {
+        type: String,
     },
 });
 
-export default fencingClearanceSchema;
+export default solidWasteDisposalSchema;
+
