@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import censusSchema from "./censusSchema";
 
 const nameSchema = new Schema({
     first: String,
@@ -8,7 +9,6 @@ const nameSchema = new Schema({
 });
 
 const addressSchema = new Schema({
-    streetNumber: String,
     streetName: String,
     apartment: String,
     householdNumber: String,
@@ -51,7 +51,10 @@ const residentSchema = new Schema({
         type: Date,
         required: true,
     },
-    dateOfDeath: Date,
+    dateOfDeath: {
+        type: Date,
+        default: null,
+    },
     placeOfBirth: String,
     address: addressSchema,
     bloodType: {
@@ -90,6 +93,13 @@ const residentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "BlockedLog",
     },
+    isBlocked: {
+        type: Boolean,
+        default: false,
+    },
+    census: {
+        type: censusSchema
+    }
 });
 
 export default residentSchema;

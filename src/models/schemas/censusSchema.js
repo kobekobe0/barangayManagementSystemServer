@@ -1,11 +1,12 @@
 import { Schema } from "mongoose";
 
 const censusSchema = new Schema({
-    residentID: {
-        type: Schema.Types.ObjectId,
-        ref: "Resident",
-        required: true,
-    },
+    //TODO
+    // residentID: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Resident",
+    //     required: true,
+    // },
     relationToHead: {
         type: String,
         required: true,

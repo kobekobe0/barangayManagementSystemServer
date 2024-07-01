@@ -20,6 +20,7 @@ const blockedLogSchema = new Schema({
     reason: {
         type: String,
         required: true,
+        default: "No reason provided",
     },
 });
 
