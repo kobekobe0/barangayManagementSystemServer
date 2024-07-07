@@ -156,6 +156,10 @@ const formSchema = new Schema({
         required: true,
         enum: Object.values(FORMTYPES)
     },
+    formName: { //TODO: Auto generate, create new constant
+        type: String,
+        required: true,
+    },
     OTCNo: String,
     ORNo: String,
     dateIssued: {

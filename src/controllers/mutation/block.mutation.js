@@ -2,7 +2,8 @@ import BlockLog from '../../models/BlockedLog.js';
 import Resident from '../../models/Resident.js';
 
 export const blockResident = async (req, res) => {
-    const {id, reason} = req.query;
+    const {id} = req.params;
+    const {reason} = req.body;
     try {
         const resident = await Resident.findById(id);
         if (!resident) {
@@ -33,7 +34,7 @@ export const blockResident = async (req, res) => {
 
 
 export const unblockResident = async (req, res) => {
-    const {id} = req.query;
+    const {id} = req.params;
     try {
         const resident = await Resident.findById(id);
         if (!resident) {

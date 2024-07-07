@@ -1,5 +1,4 @@
 import { Schema } from "mongoose";
-import censusSchema from "./censusSchema";
 
 const nameSchema = new Schema({
     first: String,
@@ -16,7 +15,7 @@ const addressSchema = new Schema({
 });
 
 const emergencyContactSchema = new Schema({
-    name: nameSchema,
+    name: String,
     relationship: String,
     mobileNumber: String,
     address: String,
@@ -68,6 +67,7 @@ const residentSchema = new Schema({
     citizenship: {
         type: String,
         required: true,
+        default: "Filipino",
     },
     civilStatus: {
         type: String,
@@ -82,13 +82,9 @@ const residentSchema = new Schema({
     IDs: IDsSchema,
     voterInfo: voterInfoSchema,
     picture: String,
-    signature: String,
     religion: String,
     employment: employmentSchema,
-    dateOfResidency: {
-        type: Date,
-        required: true,
-    },
+    yrsOfResidency: Number,
     blocked: {
         type: Schema.Types.ObjectId,
         ref: "BlockedLog",
@@ -96,9 +92,6 @@ const residentSchema = new Schema({
     isBlocked: {
         type: Boolean,
         default: false,
-    },
-    census: {
-        type: censusSchema
     }
 });
 

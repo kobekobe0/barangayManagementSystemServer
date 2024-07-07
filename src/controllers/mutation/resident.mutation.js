@@ -1,24 +1,25 @@
 import Resident from '../../models/Resident.js';
 import BlockedLog from '../../models/BlockedLog.js';
 
+//TODO: turn all '' or ' ' to null, make a function for this
+
 export const createResident = async (req, res) => {
-    const resident = req.body;
-    const { picture } = req.files;
+    let resident = req.body;
     try{
         //TODO: handle picture upload
 
         const newResident = await Resident.create(resident);
         const newBlockLog = await BlockedLog.create({ residentID: newResident._id, isBlocked: false, actionDate: new Date() });
+        
 
-        if(picture){
-            const picturePath = `./imgs/${newResident._id}-${Date.now()}`;
-            const updatedResident = await Resident.findByIdAndUpdate(newResident._id, { picture: picturePath }, { new: true });
-        }
-
+        //update resident BlockedLog
+        const updatedResidentBlock = await Resident.findByIdAndUpdate(newResident._id, { blocked: newBlockLog._id }, { new: true })
+        
         res.status(201).json({
             message: "Resident created successfully",
-            resident: newResident
+            resident: updatedResidentBlock
         });
+
     } catch (error) {
         console.log({
             error: error.message,
@@ -34,11 +35,12 @@ export const createResident = async (req, res) => {
 }
 
 export const updateResidentPicture = async (req, res) => {
-    const { id } = req.query;
-    const { picture } = req.files;
+    const { id } = req.params;
     try {
-        const picturePath = `./imgs/${id}-${Date.now()}`;
-        const updatedResident = await Resident.findByIdAndUpdate(id, { picture: picturePath }, { new: true });
+        //console.log(req.filename)
+        const picturePath = `images/${req.filename}`;
+        const updatedPpfp = { picture: picturePath };
+        const updatedResident = await Resident.findByIdAndUpdate(id, updatedPpfp, { new: true });
         res.status(200).json({
             message: "Resident picture updated successfully",
             resident: updatedResident
@@ -57,7 +59,7 @@ export const updateResidentPicture = async (req, res) => {
 }
 
 export const updateResident = async (req, res) => {
-    const { id } = req.query;
+    const { id } = req.params;
     const resident = req.body;
     try {
         const updatedResident = await Resident.findByIdAndUpdate(id, resident, { new: true });

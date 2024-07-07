@@ -6,6 +6,8 @@ import createSocketServer from "./config/socket.js";
 
 import path,  { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import residentRouter from "./routes/Resident.js";
+import blockLogRouter from "./routes/BlockLog.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,7 +18,7 @@ dotenv.config();
 connectToMongoDB();
 
 const app = express();
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname)));
 
 const port = process.env.PORT || 4000;
 app.use(express.json());
@@ -26,6 +28,8 @@ const corsOptions = {
     origin: [
         "http://localhost:3000",
         "http://localhost:3000/",
+        "http://localhost:5173",
+        "http://localhost:5173/",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -47,6 +51,9 @@ app.get("/", (req, res) => {
 
 //prevent writes during sync
 //app.use(preventWritesDuringSync);
+
+app.use("/api/resident", residentRouter)
+app.use("/api/blocklog", blockLogRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

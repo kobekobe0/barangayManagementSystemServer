@@ -1,12 +1,23 @@
 import Resident from "../../models/Resident.js";
 
 export const getResident = async (req, res) => {
-    const { id } = req.query;
+    const { id } = req.params;
     try {
         const resident = await Resident.findById(id).populate("blocked");
-        res.status(200).json({
-            data: resident,
-        });
+        if (resident) {
+            const residentWithPicture = {
+                ...resident._doc,
+                ...(resident.picture && { picture: `${process.env.SERVER_URL}/images/${resident.picture}` })
+            };
+            res.status(200).json({
+                data: residentWithPicture,
+            });
+        } else {
+            res.status(404).json({
+                error: 'Resident not found',
+                message: "No resident found with the provided ID"
+            });
+        }
     } catch (error) {
         console.log({
             error: error.message,
@@ -22,30 +33,19 @@ export const getResident = async (req, res) => {
 
 export const getResidents = async (req, res) => {
     try {
-        const { search, limit = 100, page = 1, isBlocked = false } = req.query;
-
-        const query = search
-            ? {
-                $or: [
-                    { combinedName: { $regex: search, $options: 'i' } }
-                ]
-            }
-            : {};
+        const { searchFirst = "", searchMiddle = "", searchLast = "", limit = 100, page = 1, isBlocked = false } = req.query;
+        console.log(req.query)
+        const query = {
+            $and: [
+                { 'name.first': { $regex: searchFirst, $options: 'i' } },
+                { 'name.middle': { $regex: searchMiddle, $options: 'i' } },
+                { 'name.last': { $regex: searchLast, $options: 'i' } }
+            ]
+        };
 
         const isBlockedFilter = isBlocked === 'true';
 
         const aggregatePipeline = [
-            {
-                $addFields: {
-                    combinedName: {
-                        $concat: [
-                            { $ifNull: ["$name.last", ""] }, " ",
-                            { $ifNull: ["$name.first", ""] }, " ",
-                            { $ifNull: ["$name.middle", ""] }
-                        ]
-                    }
-                }
-            },
             { $match: query },
             {
                 $lookup: {
@@ -72,14 +72,19 @@ export const getResidents = async (req, res) => {
                     name: 1,
                     dateOfBirth: 1,
                     address: 1,
-                    combinedName: 1,
-                    isBlocked: '$blockedDetails.isBlocked'
+                    isBlocked: '$blockedDetails.isBlocked',
+                    picture: 1
                 }
             }
         ];
 
-        const residents = await Resident.aggregate(aggregatePipeline);
+        let residents = await Resident.aggregate(aggregatePipeline);
         const totalResidents = await Resident.countDocuments(query);
+
+        residents = residents.map(resident => ({
+            ...resident,
+            picture: resident.picture ? `${process.env.SERVER_URL}/images/${resident.picture}` : resident.picture
+        }));
 
         res.status(200).json({
             data: residents,
