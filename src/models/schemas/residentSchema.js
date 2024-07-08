@@ -99,9 +99,18 @@ const residentSchema = new Schema({
         default: false,
     },
     sector: String,
-    p4: Boolean,
-    regBusiness: Boolean,
-    familyPlanning: Boolean
+    p4: {
+        type: Boolean,
+        default: false,
+    },
+    registeredBusiness: {
+        type: Boolean,
+        default: false,
+    },
+    familyPlanning: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 export default residentSchema;

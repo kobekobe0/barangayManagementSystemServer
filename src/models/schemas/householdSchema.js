@@ -21,6 +21,15 @@ const householdSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         ref: "Census"
+    },
+    isUnique: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    identifier: {
+        type: String,
+        default: null         
     }
 });
 

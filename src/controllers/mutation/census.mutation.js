@@ -33,7 +33,7 @@ export const createCensus = async (req, res) => {
 export const createHousehold = async (req, res) => {
     const { address, head } = req.body;
     const censusID = req.params.id;
-    try {
+    try{
         //check if head (resident) exists
         const query = {
             'name.first': new RegExp(`^${head.name.first}$`, 'i'),
@@ -42,65 +42,87 @@ export const createHousehold = async (req, res) => {
             'dateOfBirth': new Date(head.dateOfBirth)
         };
         
-        // Add `suffix` to the query conditionally if it exists
+        //// Add `suffix` to the query conditionally if it exists
         if (head.name.suffix !== null && head.name.suffix !== undefined) {
             query['name.suffix'] = new RegExp(`^${head.name.suffix}$`, 'i');
         }
         
         const resident = await Resident.findOne(query);
-        console.log(new Date(head.dateOfBirth));
-        console.log(resident);
 
-        let householdHead = null;
-        if(!resident){
+        let householdHead;
+        // if resident does not exist, create resident
+        if(!resident) {
             householdHead = await Resident.create({
                 ...head,
                 address: address,
             });
-            if(!householdHead) {
-                return res.status(409).json({
-                    message: "Failed to create household head"
-                });
-            }
-            console.log("NEW RESIDENT CREATED")
+            console.log("Resident created successfully")
         } else {
-            //update resident
             householdHead = await Resident.findByIdAndUpdate(resident._id, {
                 ...head,
                 address: address
             }, {new: true});
-            if(!householdHead) {
-                return res.status(409).json({
-                    message: "Failed to update household head"
-                });
-            }
-            console.log("RESIDENT UPDATED")
+            console.log("Resident updated successfully")
         }
 
-        //check if household already exists
-        const householdExists = await Household.findOne({
+        //check if household already exists (current census)
+        const householdExistsCurrent = await Household.findOne({
             head: householdHead._id,
+            address,
             censusID
         });
 
-        if(householdExists) {
-            return res.status(409).json({
-                message: "Household already exists",
-                data: householdExists
+        if(householdExistsCurrent) {
+            // return household that already exists
+            console.log("Household already exists in the current census")
+            return res.status(201).json({
+                message: "Household already exists in the current census, redirecting to this household",
+                data: householdExistsCurrent
             });
         }
 
-        //create household
-        const household = await Household.create({
+        //create new household
+        const householdNew = await Household.create({
             address,
             head: householdHead._id,
             censusID
         });
 
-        res.status(201).json({
+        // check if there are other census
+        const censusData = await Census.find().sort({createdAt: -1});
+
+        //check lenght of censusData
+        if(censusData.length <= 1) {
+            return res.status(201).json({
+                message: "Household created successfully",
+                data: householdNew
+            });
+        }
+
+        //COPY HOUSEHOLD FROM LAST CENSUS
+
+        // check if household already exists in last census
+        const oldHousehold = await Household.findOne({
+            head: householdHead._id,
+            address,
+            censusID: censusData[1]._id
+        });
+
+        if(oldHousehold) {
+            // copy household families to new household
+            const families = await Family.find({ householdID: oldHousehold._id });
+            families.forEach(async (family) => {
+                await Family.create({
+                    householdID: householdNew._id,
+                    members: family.members
+                });
+            });
+        }
+        
+        return res.status(201).json({
             message: "Household created successfully",
-            data: household
-        })
+            data: householdNew
+        });
     } catch (error) {
         console.log({
             error: error.message,

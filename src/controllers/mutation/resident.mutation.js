@@ -62,7 +62,15 @@ export const updateResident = async (req, res) => {
     const { id } = req.params;
     const resident = req.body;
     try {
-        const updatedResident = await Resident.findByIdAndUpdate(id, resident, { new: true });
+        const residentToUpdate = { ...resident };
+        delete residentToUpdate.picture;
+        
+        const updatedResident = await Resident.findByIdAndUpdate(
+            id,
+            residentToUpdate,
+            { new: true }
+        );
+        
         res.status(200).json({
             message: "Resident updated successfully",
             resident: updatedResident
