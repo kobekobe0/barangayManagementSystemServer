@@ -31,6 +31,7 @@ const IDsSchema = new Schema({
 const voterInfoSchema = new Schema({
     precinctNumber: String,
     voterID: String,
+    isRegistered: Boolean
 });
 
 const employmentSchema = new Schema({
@@ -81,6 +82,10 @@ const residentSchema = new Schema({
     educationalAttainment: String,
     IDs: IDsSchema,
     voterInfo: voterInfoSchema,
+    pregnant: {
+        type: Boolean,
+        default: false,
+    },
     picture: String,
     religion: String,
     employment: employmentSchema,
@@ -92,7 +97,11 @@ const residentSchema = new Schema({
     isBlocked: {
         type: Boolean,
         default: false,
-    }
+    },
+    sector: String,
+    p4: Boolean,
+    regBusiness: Boolean,
+    familyPlanning: Boolean
 });
 
 export default residentSchema;

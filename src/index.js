@@ -8,6 +8,7 @@ import path,  { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import residentRouter from "./routes/Resident.js";
 import blockLogRouter from "./routes/BlockLog.js";
+import cenusRouter from "./routes/Cenus.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,6 +55,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/resident", residentRouter)
 app.use("/api/blocklog", blockLogRouter)
+app.use("/api/census", cenusRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
