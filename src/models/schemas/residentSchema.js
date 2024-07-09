@@ -51,10 +51,7 @@ const residentSchema = new Schema({
         type: Date,
         required: true,
     },
-    dateOfDeath: {
-        type: Date,
-        default: null,
-    },
+    dateOfDeath: Date,
     placeOfBirth: String,
     address: addressSchema,
     bloodType: {
@@ -72,7 +69,7 @@ const residentSchema = new Schema({
     },
     civilStatus: {
         type: String,
-        enum: ["Single", "Married", "Divorced", "Widowed"],
+        enum: ["single", "married", "divorced", "widowed"],
     },
     mobileNumber: String,
     landlineNumber: String,

@@ -5,13 +5,10 @@ const addressSchema = new Schema({
     apartment: String,
     householdNumber: String,
     sitio: String,
-});
+}, { _id: false });
 
 const householdSchema = new Schema({
-    address: {
-        type: addressSchema,
-        required: true
-    },
+    address: addressSchema,
     head: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -24,13 +21,9 @@ const householdSchema = new Schema({
     },
     isUnique: {
         type: Boolean,
-        required: true,
-        default: true
+        default: false
     },
-    identifier: {
-        type: String,
-        default: null         
-    }
+    identifier: String
 });
 
 export default householdSchema;
