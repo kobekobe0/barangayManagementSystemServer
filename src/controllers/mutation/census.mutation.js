@@ -197,6 +197,7 @@ export const createHousehold = async (req, res) => {
     }
 }
 
+// ------ FAMILY ------
 
 export const createFamily = async (req, res) => {
     const householdID = req.params.id;
@@ -254,3 +255,105 @@ export const deleteFamily = async (req, res) => {
 
 
 
+
+// ------ MEMBER ------
+
+export const saveMember = async (req, res) => {
+    const familyID = req.params.id;
+    const { member, address } = req.body;
+    try {
+        const family = await Family.findById(familyID).populate('members');
+        if(!family) {
+            return res.status(404).json({
+                message: "Family not found"
+            });
+        }
+
+        console.log('\x1b[32m%s\x1b[0m', '✔ Passed 1');
+        // remove the isSaved property from the member
+        delete member.isSaved;
+
+        console.log('\x1b[32m%s\x1b[0m', '✔ Passed 2');
+
+        //check if member already exists in the family by id
+        const memberExists = family.members.find(m => m._id == member._id);
+
+        console.log('\x1b[32m%s\x1b[0m', '✔ Passed 3');
+        
+        if(memberExists) {
+            //update member
+            const updatedMember = await Resident.findByIdAndUpdate(member._id, {
+                ...member,
+                address
+            }, { new: true });
+
+            console.log('\x1b[32m%s\x1b[0m', '✔ Passed 4');
+
+            return res.status(200).json({
+                message: "Member updated successfully",
+                data: updatedMember
+            });
+        }
+
+        // adding new member to family members array
+
+        delete member._id;
+        const query = {
+            'name.first': new RegExp(`^${member.name.first}$`, 'i'),
+            'name.last': new RegExp(`^${member.name.last}$`, 'i'),
+            'name.middle': new RegExp(`^${member.name.middle}$`, 'i'),
+            'dateOfBirth': new Date(member.dateOfBirth)
+        };
+
+        if (member.name.suffix !== null && member.name.suffix !== undefined) {
+            query['name.suffix'] = new RegExp(`^${member.name.suffix}$`, 'i');
+        }
+
+        const checkMember = await Resident.findOne(query);
+
+        console.log('\x1b[32m%s\x1b[0m', '✔ Passed 5');
+
+        // if member already exists, update the member and push to family members
+        if(checkMember) {
+            //update member
+            const updatedMember = await Resident.findByIdAndUpdate(checkMember._id, {
+                ...member,
+                address
+            }, { new: true });
+
+            family.members.push(updatedMember._id);
+            await family.save();
+
+            console.log('\x1b[32m%s\x1b[0m', '✔ Passed 6');
+
+            return res.status(200).json({
+                message: "Member saved successfully, resident details updated.",
+                data: updatedMember
+            });
+        }
+
+        // create new member
+        const newMember = await Resident.create({
+            ...member,
+            address
+        });
+        family.members.push(newMember._id);
+        await family.save();
+        
+        console.log('\x1b[32m%s\x1b[0m', '✔ Passed 1');
+        return res.status(201).json({
+            message: "Member saved successfully, new resident created.",
+            data: newMember
+        });
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to save member",
+            function: "saveMember"
+        });
+        res.status(409).json({
+            error: error.message,
+            message: "Failed to save member"
+        });
+    }
+}

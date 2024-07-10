@@ -8,6 +8,26 @@ export const createResident = async (req, res) => {
     try{
         //TODO: handle picture upload
 
+        //check if resident already exists
+        const query = {
+            'name.first': new RegExp(`^${resident.name.first}$`, 'i'),
+            'name.last': new RegExp(`^${resident.name.last}$`, 'i'),
+            'name.middle': new RegExp(`^${resident.name.middle}$`, 'i'),
+            'dateOfBirth': new Date(resident.dateOfBirth)
+        };
+
+        //// ADD `suffix` to the query conditionally if it exists
+        if (resident.name.suffix !== null && resident.name.suffix !== undefined) {
+            query['name.suffix'] = new RegExp(`^${resident.name.suffix}$`, 'i');
+        }
+
+        const existingResident = await Resident.findOne(query);
+        if(existingResident) {
+            return res.status(409).json({
+                message: "Resident already exists"
+            });
+        }
+
         const newResident = await Resident.create(resident);
         const newBlockLog = await BlockedLog.create({ residentID: newResident._id, isBlocked: false, actionDate: new Date() });
         

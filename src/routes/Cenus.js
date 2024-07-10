@@ -1,5 +1,5 @@
 import express from 'express'
-import { createCensus, createFamily, createHousehold, deleteFamily } from '../controllers/mutation/census.mutation.js'
+import { createCensus, createFamily, createHousehold, deleteFamily, saveMember } from '../controllers/mutation/census.mutation.js'
 import { getAllCensus, getHousehold, getHouseholdFamilies } from '../controllers/query/census.query.js'
 import Family from '../models/Family.js'
 
@@ -21,6 +21,10 @@ censusRouter.post('/family/create/:id', createFamily)
 
 censusRouter.delete('/family/delete/:id', deleteFamily)
 
-censusRouter.get('/family/household/:id', getHouseholdFamilies)
+censusRouter.get('/family-in-household/:id', getHouseholdFamilies)
+
+// ---- Members ----
+
+censusRouter.post('/member/save/:id', saveMember)
 
 export default censusRouter
