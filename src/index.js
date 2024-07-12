@@ -10,6 +10,7 @@ import residentRouter from "./routes/Resident.js";
 import blockLogRouter from "./routes/BlockLog.js";
 import cenusRouter from "./routes/Cenus.js";
 import { sanitizeObjectWithTrimMiddleware } from "./helper/sanitizeData.js";
+import receiptRouter from "./routes/Receipt.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,6 +60,7 @@ app.use(sanitizeObjectWithTrimMiddleware)
 app.use("/api/resident", residentRouter)
 app.use("/api/blocklog", blockLogRouter)
 app.use("/api/census", cenusRouter)
+app.use("/api/receipt", receiptRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

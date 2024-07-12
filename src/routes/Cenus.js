@@ -1,7 +1,6 @@
 import express from 'express'
 import { createCensus, createFamily, createHousehold, deleteFamily, saveMember } from '../controllers/mutation/census.mutation.js'
 import { getAllCensus, getHousehold, getHouseholdFamilies } from '../controllers/query/census.query.js'
-import Family from '../models/Family.js'
 
 const censusRouter = express.Router()
 
