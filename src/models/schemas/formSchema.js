@@ -1,25 +1,6 @@
 import { Schema } from "mongoose";
 import FORMTYPES from "../../constants/forms";
 
-const businessSchema = new Schema({
-    businessName: {
-        type: String,
-        required: true,
-    },
-    location: {
-        type: String,
-        required: true,
-    },
-    natureOfBusiness: String,
-    plateNumber: String,
-    cellphoneNumber: String,
-    new: {
-        type: Boolean,
-        default: true,
-    },
-    dateClosed: Date,
-});
-
 const employmentSchema = new Schema({
     companyName: String,
     location: String,
@@ -174,8 +155,9 @@ const formSchema = new Schema({
     purpose: String,
 
     business: {
-        type: businessSchema,
+        type: Schema.Types.ObjectId,
         default: undefined,
+        ref: 'Business'
     },
     employment: {
         type: employmentSchema,
