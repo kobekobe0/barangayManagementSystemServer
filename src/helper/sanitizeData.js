@@ -21,6 +21,9 @@ export const sanitizeString = (str) => {
  * @returns {Object} - The sanitized object
  */
 export const sanitizeObjectWithTrim = (obj) => {
+    if (Array.isArray(obj)) {
+        return obj.map(item => sanitizeObjectWithTrim(item));
+    }
     const sanitizedObj = {};
     for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
@@ -44,10 +47,10 @@ export const sanitizeObjectWithTrim = (obj) => {
  */
 export const sanitizeObjectWithTrimMiddleware = (req, res, next) => {
     if (req.body) {
-        console.log("Sanitizing request body");
-        console.log(req.body);
+        // console.log("Sanitizing request body");
+        // console.log(req.body);
         req.body = sanitizeObjectWithTrim(req.body);
-        console.log("Sanitized request body: ", req.body);
+        //console.log("Sanitized request body: ", req.body);
     }
     next();
 }
