@@ -2,9 +2,9 @@ const FORMTYPES = {
     "BarangayClearance": "BC",
     "BuildingClearance": "BDC",
     "BonafideResidentCertification": "BRC",
-    "BusinessClearance": "BSC",
+    "BusinessClearance": "BSC", //business
     "CalamityLoan": "CL",
-    "ClosedBusiness": "CB",
+    "ClosedBusiness": "CB", //business
     "CoHabitationCertification": "CH",
     "ElectricalClearance": "ECC",
     "EmploymentClearance": "EC",
@@ -19,7 +19,7 @@ const FORMTYPES = {
     "PAOCertification": "PAO",
     "ReconstructionClearance": "RC",
     "SoloParentCertification": "SLP",
-    "SolidWasteDisposal": "SWD",
+    "SolidWasteDisposal": "SWD", //business
     "TODACertification": "TODA",
     "UnemploymentCertification": "UEC",
     "WaterPermit": "WP",

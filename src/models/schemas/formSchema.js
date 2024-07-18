@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import FORMTYPES from "../../constants/forms";
+import FORMTYPES from "../../constants/forms.js";
 
 const employmentSchema = new Schema({
     companyName: String,

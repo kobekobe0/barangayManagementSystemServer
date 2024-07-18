@@ -14,10 +14,17 @@ const businessSchema = new Schema({
         type: String,
         required: true,
     },
+    amount: {
+        type: Number,
+        default: 0,
+    },
     natureOfBusiness: String,
     plateNumber: String,
     cellphoneNumber: String,
-    expiryDate: Date,
+    isExpired: {
+        type: Boolean,
+        default: false,
+    },
     isNew: {
         type: Boolean,
         default: true,
