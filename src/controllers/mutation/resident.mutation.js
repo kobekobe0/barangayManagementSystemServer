@@ -111,7 +111,11 @@ export const updateResident = async (req, res) => {
 export const deleteResident = async (req, res) => {
     const { id } = req.query;
     try {
-        await Resident.findByIdAndDelete(id);
+        const resident = await Resident.findByIdAndUpdate(id, {
+            isDeleted: true
+        });
+        const blockLog = await BlockedLog.findOneAndUpdate({ residentID: id }, { isDeleted: true });
+        //set isDeleted to true
         res.status(200).json({
             message: "Resident deleted successfully"
         });

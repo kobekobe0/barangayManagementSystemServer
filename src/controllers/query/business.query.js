@@ -5,7 +5,9 @@ import Resident from "../../models/Resident.js";
 
 export const getAllBusinesses = async (req, res) => {
     const { name, status, residentID } = req.query;
-    const query = {};
+    const query = {
+        isDeleted: false
+    };
     if(name) query.businessName = { $regex: name, $options: 'i' }
 
     if(status){
@@ -39,10 +41,10 @@ export const getAllBusinesses = async (req, res) => {
 
 export const getBusinessNumbers = async (req, res) => {
     try {
-        const totalBusinesses = await Business.countDocuments();
-        const activeBusinesses = await Business.countDocuments({ isExpired: false, isClosed: false });
-        const expiredBusinesses = await Business.countDocuments({ isExpired: true });
-        const closedBusinesses = await Business.countDocuments({ isClosed: true });
+        const totalBusinesses = await Business.countDocuments({ isDeleted: false });
+        const activeBusinesses = await Business.countDocuments({ isExpired: false, isClosed: false, isDeleted: false });
+        const expiredBusinesses = await Business.countDocuments({ isExpired: true, isDeleted: false });
+        const closedBusinesses = await Business.countDocuments({ isClosed: true, isDeleted: false });
 
         res.status(200).json({
             message: 'Business numbers fetched successfully',

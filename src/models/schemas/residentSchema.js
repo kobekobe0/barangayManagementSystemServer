@@ -107,7 +107,11 @@ const residentSchema = new Schema({
     familyPlanning: {
         type: Boolean,
         default: false,
-    }
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 export default residentSchema;

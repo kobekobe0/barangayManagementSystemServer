@@ -23,7 +23,7 @@ const householdSchema = new Schema({
         type: Boolean,
         default: false
     },
-    identifier: String
+    identifier: String,
 });
 
 export default householdSchema;

@@ -50,6 +50,10 @@ const receiptSchema = new Schema({
     dateCreated: {
         type: Date,
         default: Date.now
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -236,6 +236,10 @@ const formSchema = new Schema({
         type: Date,
         required: true,
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 export default formSchema;

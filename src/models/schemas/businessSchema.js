@@ -38,6 +38,10 @@ const businessSchema = new Schema({
         type: [Schema.Types.ObjectId],
         default: [],
         ref: "Form"
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 });
 

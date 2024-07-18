@@ -4,13 +4,13 @@ import Resident from "../../models/Resident.js";
 export const getResidentBlockLog = async (req, res) => {
     const { id } = req.query;
     try {
-        const resident = await Resident.findById(id);
+        const resident = await Resident.findOne({ _id: id, isDeleted: false });
         if (!resident) {
             return res.status(404).json({
                 message: "Resident not found",
             });
         }
-        const blockLogs = await BlockedLog.find({ residentID: id });
+        const blockLogs = await BlockedLog.findOne({ residentID: id });
         res.status(200).json({
             data: blockLogs,
         });
@@ -39,8 +39,8 @@ export const getAllBlockLog = async (req, res) => {
             }
         };
 
-        const blockLogs = await BlockedLog.find({}, null, options);
-        const totalLogs = await BlockedLog.countDocuments();
+        const blockLogs = await BlockedLog.find({isDeleted: false, isBlocked: true}, null, options);
+        const totalLogs = blockLogs.length;
 
         res.status(200).json({
             data: blockLogs,

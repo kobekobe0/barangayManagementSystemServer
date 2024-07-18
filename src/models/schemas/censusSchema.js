@@ -13,7 +13,7 @@ const censusSchema = new Schema({
         type: [Schema.Types.ObjectId],
         default: [],
         ref: "Household"
-    }
+    },
 });
 
 export default censusSchema;

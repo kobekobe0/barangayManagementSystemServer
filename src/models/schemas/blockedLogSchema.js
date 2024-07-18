@@ -22,6 +22,10 @@ const blockedLogSchema = new Schema({
         required: true,
         default: "No reason provided",
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 export default blockedLogSchema;

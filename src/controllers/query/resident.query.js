@@ -3,7 +3,7 @@ import Resident from "../../models/Resident.js";
 export const getResident = async (req, res) => {
     const { id } = req.params;
     try {
-        const resident = await Resident.findById(id).populate("blocked");
+        const resident = await Resident.findById(id, {isDeleted: false}).populate("blocked");
         if (resident) {
             const residentWithPicture = {
                 ...resident._doc,
