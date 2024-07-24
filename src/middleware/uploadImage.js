@@ -17,22 +17,33 @@ const processImage = async (req, res, next) => {
 
     const file = req.file;
     const dir = './src/images/'
-    const filename = req.params.id + '_pfp.webp';
+    const filename = req.params.id + '_pfp.png';
     const outputPath = path.join(dir, filename);
 
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
 
+    const targetWidth = 150;
+    const targetHeight = 150;
+
+    const { width, height } = await sharp(file.buffer).metadata();
+    const cropWidth = Math.min(width, targetWidth);
+    const cropHeight = Math.min(height, targetHeight);
+    const cropX = Math.floor((width - cropWidth) / 2);
+    const cropY = Math.floor((height - cropHeight) / 2);
+
     await sharp(file.buffer)
-      .webp()
+      .extract({ width: cropWidth, height: cropHeight, left: cropX, top: cropY })
+      .resize({ width: targetWidth, height: targetHeight })
+      .png()
       .toFile(outputPath);
 
     req.filename = filename;
     
     next();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
 
