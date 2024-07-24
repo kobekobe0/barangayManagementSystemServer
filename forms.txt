@@ -28,7 +28,7 @@ x Zoning Clearance - ZC
 
 BC - Barangay Clearance
 BDC - Building Clearance
-BRC - Bonafide Resident Certification
+BRC - Bonafide Resident Certification Certificate of residency
 BSC - Business Clearance
 CL - Calamity Loan
 CB - Closed Business
