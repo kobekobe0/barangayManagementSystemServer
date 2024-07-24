@@ -11,7 +11,7 @@ export const getResidentBlockLog = async (req, res) => {
             });
         }
         const blockLogs = await BlockedLog.findOne({ residentID: id });
-        res.status(200).json({
+        return res.status(200).json({
             data: blockLogs,
         });
     } catch (error) {
@@ -20,7 +20,7 @@ export const getResidentBlockLog = async (req, res) => {
             message: "Failed to get resident block logs",
             function: "getResidentBlockLogs"
         });
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get resident block logs"
         });
@@ -29,23 +29,51 @@ export const getResidentBlockLog = async (req, res) => {
 
 export const getAllBlockLog = async (req, res) => {
     try {
-        const { limit = 50, page = 1 } = req.query;
+        const { first = "", last="", middle="" } = req.query;
 
-        const options = {
-            limit: parseInt(limit),
-            skip: (parseInt(page) - 1) * parseInt(limit),
-            match: {
-                isBlocked: true
+        let matchStage = {isBlocked: true};
+        if (first || last || middle) {
+            matchStage.$or = [];
+            if (first) {
+                matchStage.$or.push({ "patient.name.first": { $regex: first, $options: 'i' } });
             }
-        };
+            if (middle) {
+                matchStage.$or.push({ "patient.name.middle": { $regex: middle, $options: 'i' } });
+            }
+            if (last) {
+                matchStage.$or.push({ "patient.name.last": { $regex: last, $options: 'i' } });
+            }
+        }
 
-        const blockLogs = await BlockedLog.find({isDeleted: false, isBlocked: true}, null, options);
+        const blockLogs = await BlockedLog.aggregate([
+            {
+                $lookup: {
+                    from: "residents",
+                    localField: "residentID",
+                    foreignField: "_id",
+                    as: "residentID"
+                }
+            },
+            { $unwind: "$residentID" },
+            {
+                $project: {
+                    "residentID.name": 1,
+                    "residentID._id": 1,
+                    isBlocked: 1,
+                    dateBlocked: 1,
+                    dateUnblocked: 1,
+                    reason: 1,
+                    isDeleted: 1
+                }
+            },
+            { $match: matchStage },
+            { $sort: { dateBlocked: -1 } },
+        ]);
+
         const totalLogs = blockLogs.length;
 
-        res.status(200).json({
+        return res.status(200).json({
             data: blockLogs,
-            totalPages: Math.ceil(totalLogs / limit),
-            currentPage: parseInt(page),
             totalLogs
         });
     } catch (error) {
@@ -54,7 +82,7 @@ export const getAllBlockLog = async (req, res) => {
             message: "Failed to get all block logs",
             function: "getAllBlockLog"
         });
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get all block logs"
         });
