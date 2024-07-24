@@ -12,7 +12,7 @@ export const createBusiness = async (req, res) => {
             })
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Business created successfully',
             data: business,
         })
@@ -22,7 +22,7 @@ export const createBusiness = async (req, res) => {
             function: 'createBusiness',
         })
 
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             function: 'createBusiness',
         })
@@ -31,7 +31,7 @@ export const createBusiness = async (req, res) => {
 
 
 export const generateBusinessForm = async (req, res) => { //TODO: handle also here other transactions regarding business
-    const {  residentID, businessID, isNew, purpose = "", OTCNo, ORNo } = req.body
+    const {  residentID, businessID, isNew, purpose = "", CTCNo, ORNo } = req.body
     // create form
     try{
         const form = await Form.create({
@@ -41,7 +41,7 @@ export const generateBusinessForm = async (req, res) => { //TODO: handle also he
             business: businessID,
             purpose,
             placeIssued: 'Barangay Hall', // TODO: Create collection in db for settings
-            OTCNo,
+            CTCNo,
             ORNo,
         })
     
@@ -52,14 +52,10 @@ export const generateBusinessForm = async (req, res) => { //TODO: handle also he
             })
         }
     
-        //get the dec 31 of current year
-        const currentYear = new Date().getFullYear()
-        const expiryDate = new Date(currentYear, 11, 31)
-    
         //update business isNew and expiry date and push the form ID
         const updatedBusiness = await Business.findByIdAndUpdate(businessID, {
             isNew, //NOTE: If false for renewal
-            expiryDate,
+            isExpired: false,
             $push: { formIDs: form._id }
         }, { new: true })
     
@@ -70,7 +66,7 @@ export const generateBusinessForm = async (req, res) => { //TODO: handle also he
             })
         }
     
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Form created successfully',
             data: form,
         })
@@ -79,7 +75,7 @@ export const generateBusinessForm = async (req, res) => { //TODO: handle also he
             message: error.message,
             function: 'generateBusinessForm',
         })
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             function: 'generateBusinessForm',
         }) // TODO: make res error into a function
@@ -88,10 +84,10 @@ export const generateBusinessForm = async (req, res) => { //TODO: handle also he
 
 export const updateBusiness = async (req, res) => {
     try {
-        const { businessID } = req.params
+        const { id } = req.params
         // eto lang mga ipasa from frontend const { businessName, location, natureOfBusiness, plateNumber, cellphoneNumber, expiryDate, isNew, isClosed, dateClosed } = req.body
         //update business except for its formIDs
-        const updatedBusiness = await Business.findByIdAndUpdate(businessID, req.body, { new: true })
+        const updatedBusiness = await Business.findByIdAndUpdate(id, req.body, { new: true })
 
         if(!updatedBusiness) {
             return res.status(400).json({
@@ -100,7 +96,7 @@ export const updateBusiness = async (req, res) => {
             })
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Business updated successfully',
             data: updatedBusiness,
         })
@@ -111,10 +107,39 @@ export const updateBusiness = async (req, res) => {
             function: 'updateBusiness',
         })
 
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             function: 'updateBusiness',
         })
     }
 }
 
+export const deleteBusiness = async (req, res) => {
+    try {
+        const { id } = req.params
+        const deletedBusiness = await Business.findByIdAndUpdate(id, { isDeleted: true }, { new: true })
+
+        if(!deletedBusiness) {
+            return res.status(400).json({
+                message: 'Business not deleted',
+                data: deletedBusiness,
+            })
+        }
+
+        return res.status(201).json({
+            message: 'Business deleted successfully',
+            data: deletedBusiness,
+        })
+
+    } catch (error) {
+        console.log({
+            message: error.message,
+            function: 'deleteBusiness',
+        })
+
+        return res.status(500).json({
+            message: error.message,
+            function: 'deleteBusiness',
+        })
+    }
+}

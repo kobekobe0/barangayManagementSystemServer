@@ -11,7 +11,7 @@ export const getAllCensus = async (req, res) => {
                 message: "Census not found"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: "Census found",
             data: census
         });
@@ -21,7 +21,7 @@ export const getAllCensus = async (req, res) => {
             message: "Failed to get census",
             function: "getAllCensus"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get census"
         });
@@ -41,7 +41,7 @@ export const getHousehold = async (req, res) => {
                 message: "Household not found"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: "Household found",
             data: household
         });
@@ -51,7 +51,7 @@ export const getHousehold = async (req, res) => {
             message: "Failed to get household",
             function: "getHousehold"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get household"
         });
@@ -69,7 +69,7 @@ export const getHouseholdFamilies = async (req, res) => {
                 message: "Families not found"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: "Families found",
             data: families
         });
@@ -79,7 +79,7 @@ export const getHouseholdFamilies = async (req, res) => {
             message: "Failed to get families",
             function: "getHouseholdFamilies"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get families"
         });

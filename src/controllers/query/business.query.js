@@ -22,7 +22,7 @@ export const getAllBusinesses = async (req, res) => {
 
     try {
         const businesses = await Business.find(query).populate('residentID', 'name');        
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Businesses fetched successfully',
             data: businesses,
         });
@@ -32,7 +32,7 @@ export const getAllBusinesses = async (req, res) => {
             message: "Failed to get businesses",
             function: "getAllBusinesses"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get businesses"
         });
@@ -46,7 +46,14 @@ export const getBusinessNumbers = async (req, res) => {
         const expiredBusinesses = await Business.countDocuments({ isExpired: true, isDeleted: false });
         const closedBusinesses = await Business.countDocuments({ isClosed: true, isDeleted: false });
 
-        res.status(200).json({
+        console.log({
+            totalBusinesses,
+            activeBusinesses,
+            expiredBusinesses,
+            closedBusinesses,
+        })
+
+        return res.status(200).json({
             message: 'Business numbers fetched successfully',
             data: {
                 totalBusinesses,
@@ -61,9 +68,36 @@ export const getBusinessNumbers = async (req, res) => {
             message: "Failed to get business numbers",
             function: "getBusinessNumbers"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get business numbers"
+        });
+    }
+}
+
+export const getBusiness = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const business = await Business.findById(id).populate('residentID', 'name isBlocked address dateOfBirth placeOfBirth').populate('formIDs');
+        if (business) {
+            return res.status(200).json({
+                data: business,
+            });
+        } else {
+            return res.status(404).json({
+                error: 'Business not found',
+                message: "No business found with the provided ID"
+            });
+        }
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to get business",
+            function: "getBusiness"
+        })
+        return res.status(409).json({ 
+            error: error.message,
+            message: "Failed to get business"
         });
     }
 }

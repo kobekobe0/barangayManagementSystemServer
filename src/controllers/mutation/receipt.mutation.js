@@ -19,7 +19,7 @@ export const createReceipt = async (req, res) => {
             items
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Receipt created",
             data: newReceipt
         });
@@ -29,7 +29,7 @@ export const createReceipt = async (req, res) => {
             message: "Failed to create receipt",
             function: "createReceipt"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to create receipt"
         });
@@ -44,7 +44,7 @@ export const saveReceiptItems = async (req, res) => {
         //NOTE: transaform date string to date object in frontend
         const updatedReceipt = await Receipt.findByIdAndUpdate(id, { items }, {new: true});
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Receipt items updated",
             data: updatedReceipt
         });
@@ -54,7 +54,7 @@ export const saveReceiptItems = async (req, res) => {
             message: "Failed to update receipt items",
             function: "saveReceiptItems"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to update receipt items"
         });
@@ -66,7 +66,7 @@ export const deleteReceipt = async (req, res) => {
 
     try {
         const deletedReceipt = await Receipt.findByIdAndDelete(id);
-        res.status(201).json({
+        return res.status(201).json({
             message: "Receipt deleted",
             data: deletedReceipt
         });
@@ -76,7 +76,7 @@ export const deleteReceipt = async (req, res) => {
             message: "Failed to delete receipt",
             function: "deleteReceipt"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to delete receipt"
         });

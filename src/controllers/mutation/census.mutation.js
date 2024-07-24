@@ -15,7 +15,7 @@ export const createCensus = async (req, res) => {
                 message: "Failed to create census"
             });
         }
-        res.status(201).json({
+        return res.status(201).json({
             message: "Census created successfully",
             census: newCensus
         });
@@ -25,7 +25,7 @@ export const createCensus = async (req, res) => {
             message: "Failed to create census",
             function: "createCensus"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to create census"
         });
@@ -190,7 +190,7 @@ export const createHousehold = async (req, res) => {
             message: "Failed to create household",
             function: "createHousehold"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to create household"
         });
@@ -210,7 +210,7 @@ export const createFamily = async (req, res) => {
                 message: "Failed to create family"
             });
         }
-        res.status(201).json({
+        return res.status(201).json({
             message: "Family created successfully",
             data: family
         });
@@ -220,7 +220,7 @@ export const createFamily = async (req, res) => {
             message: "Failed to create family",
             function: "createFamily"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to create family"
         });
@@ -236,7 +236,7 @@ export const deleteFamily = async (req, res) => {
                 message: "Family not found"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: "Family deleted successfully",
             success: true
         });
@@ -246,7 +246,7 @@ export const deleteFamily = async (req, res) => {
             message: "Failed to delete family",
             function: "deleteFamily"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to delete family"
         });
@@ -351,7 +351,7 @@ export const saveMember = async (req, res) => {
             message: "Failed to save member",
             function: "saveMember"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to save member"
         });

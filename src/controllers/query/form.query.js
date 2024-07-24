@@ -6,7 +6,7 @@ export const getForm = async (req, res) => {
         const form = await Form
             .findById(id)
             .populate('resident')
-        res.status(200).json({
+        return res.status(200).json({
             data: form,
         });
     }
@@ -16,7 +16,7 @@ export const getForm = async (req, res) => {
             message: "Failed to get form",
             function: "getForm"
         })
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get form"
         });
@@ -60,7 +60,7 @@ export const getForms = async (req, res) => {
             .sort({ dateIssued: -1 }) // Sort by dateIssued in descending order
             .populate('residentID'); // Populate the resident details if needed
 
-        res.status(200).json({
+        return res.status(200).json({
             data: forms,
             totalPages,
             currentPage: parseInt(page),
@@ -68,7 +68,7 @@ export const getForms = async (req, res) => {
         });
     } catch (error) {
         console.error("Failed to get forms:", error);
-        res.status(500).json({ error: "Failed to get forms" });
+        return res.status(500).json({ error: "Failed to get forms" });
     }
 };
 
@@ -96,7 +96,7 @@ export const getResidentForms = async (req, res) => {
             .sort({ dateIssued: -1 }) // Sort by dateIssued in descending order
             .populate('residentID'); // Populate the resident details if needed
 
-        res.status(200).json({
+        return res.status(200).json({
             data: forms,
             totalPages,
             currentPage: parseInt(page),
@@ -104,6 +104,6 @@ export const getResidentForms = async (req, res) => {
         });
     } catch (error) {
         console.error("Failed to get resident forms:", error);
-        res.status(500).json({ error: "Failed to get resident forms" });
+        return res.status(500).json({ error: "Failed to get resident forms" });
     }
 };

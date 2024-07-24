@@ -9,7 +9,7 @@ export const getReceipt = async (req, res) => {
                 message: "Receipt not found"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: "Receipt found",
             data: receipt
         });
@@ -19,7 +19,7 @@ export const getReceipt = async (req, res) => {
             message: "Failed to get receipt",
             function: "getReceipt"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get receipt"
         });
@@ -54,7 +54,7 @@ export const getReceipts = async (req, res) => {
         // Find receipts with pagination
         const receipts = await Receipt.paginate(query, options);
         
-        res.status(200).json({
+        return res.status(200).json({
             message: "Receipts found",
             data: receipts.docs,
             totalPages: receipts.totalPages,
@@ -67,7 +67,7 @@ export const getReceipts = async (req, res) => {
             message: "Failed to get receipts",
             function: "getReceipts"
         });
-        res.status(409).json({
+        return res.status(409).json({
             error: error.message,
             message: "Failed to get receipts"
         });

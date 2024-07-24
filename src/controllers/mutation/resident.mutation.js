@@ -35,7 +35,7 @@ export const createResident = async (req, res) => {
         //update resident BlockedLog
         const updatedResidentBlock = await Resident.findByIdAndUpdate(newResident._id, { blocked: newBlockLog._id }, { new: true })
         
-        res.status(201).json({
+        return res.status(201).json({
             message: "Resident created successfully",
             resident: updatedResidentBlock
         });
@@ -46,7 +46,7 @@ export const createResident = async (req, res) => {
             message: "Failed to create resident",
             function: "createResident"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to create resident"
         });
@@ -61,7 +61,7 @@ export const updateResidentPicture = async (req, res) => {
         const picturePath = `images/${req.filename}`;
         const updatedPpfp = { picture: picturePath };
         const updatedResident = await Resident.findByIdAndUpdate(id, updatedPpfp, { new: true });
-        res.status(200).json({
+        return res.status(200).json({
             message: "Resident picture updated successfully",
             resident: updatedResident
         });
@@ -71,7 +71,7 @@ export const updateResidentPicture = async (req, res) => {
             message: "Failed to update resident picture",
             function: "updateResidentPicture"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to update resident picture"
         });
@@ -91,7 +91,7 @@ export const updateResident = async (req, res) => {
             { new: true }
         );
         
-        res.status(200).json({
+        return res.status(200).json({
             message: "Resident updated successfully",
             resident: updatedResident
         });
@@ -101,7 +101,7 @@ export const updateResident = async (req, res) => {
             message: "Failed to update resident",
             function: "updateResident"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to update resident"
         });
@@ -116,7 +116,7 @@ export const deleteResident = async (req, res) => {
         });
         const blockLog = await BlockedLog.findOneAndUpdate({ residentID: id }, { isDeleted: true });
         //set isDeleted to true
-        res.status(200).json({
+        return res.status(200).json({
             message: "Resident deleted successfully"
         });
     } catch (error) {
@@ -125,7 +125,7 @@ export const deleteResident = async (req, res) => {
             message: "Failed to delete resident",
             function: "deleteResident"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to delete resident"
         });

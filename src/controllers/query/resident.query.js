@@ -9,11 +9,11 @@ export const getResident = async (req, res) => {
                 ...resident._doc,
                 ...(resident.picture && { picture: `${process.env.SERVER_URL}/images/${resident.picture}` })
             };
-            res.status(200).json({
+            return res.status(200).json({
                 data: residentWithPicture,
             });
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 error: 'Resident not found',
                 message: "No resident found with the provided ID"
             });
@@ -24,7 +24,7 @@ export const getResident = async (req, res) => {
             message: "Failed to get resident",
             function: "getResident"
         })
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get resident"
         });
@@ -86,7 +86,7 @@ export const getResidents = async (req, res) => {
             picture: resident.picture ? `${process.env.SERVER_URL}/images/${resident.picture}` : resident.picture
         }));
 
-        res.status(200).json({
+        return res.status(200).json({
             data: residents,
             totalPages: Math.ceil(totalResidents / limit),
             currentPage: parseInt(page),
@@ -98,7 +98,7 @@ export const getResidents = async (req, res) => {
             message: "Failed to get residents",
             function: "getResidents"
         });
-        res.status(409).json({ 
+        return res.status(409).json({ 
             error: error.message,
             message: "Failed to get residents"
         });
