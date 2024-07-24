@@ -1,0 +1,20 @@
+const basePath = '../templates/'
+
+const TEMPLATE_PATHS = {
+    BC: `${basePath}barangayClearance.docx`,
+    BDC: `${basePath}buildingClearance.docx`,
+    BRC: `${basePath}bonafideResidentCertification.docx`,
+    BSC: `${basePath}businessClearance.docx`,
+    CB: `${basePath}closedBusiness.docx`,
+    CH: `${basePath}coHabitationCertification.docx`,
+    EX: `${basePath}excavationClearance.docx`,
+    FC: `${basePath}fencingClearance.docx`,
+    IC: `${basePath}indigencyCertification.docx`,
+    LBC: `${basePath}lateBCRegistration.docx`,
+    NRC: `${basePath}nonResidentCertification.docx`,
+    SLP: `${basePath}soloParent.docx`,
+    TODA: `${basePath}toda.docx`,
+    ZC: `${basePath}zoningClearance.docx`,
+}
+
+export default TEMPLATE_PATHS;
