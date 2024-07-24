@@ -1,10 +1,44 @@
 import { Schema } from "mongoose";
 
+const nameSchema = new Schema({
+    first: {
+        type: String,
+        required: true,
+    },
+    middle: {
+        type: String,
+        default: null,
+    },
+    last: {
+        type: String,
+        required: true,
+    },
+    suffix: {
+        type: String,
+        default: null,
+    },
+});
+
+const nonResidentSchema = new Schema({
+    name: nameSchema,
+    address: String,
+    dateOfBirth: Date,
+    placeOfBirth: String,
+});
+
 const businessSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
         ref: 'Resident',
-        required: true
+    },
+    ownerAdress: String,
+    isResident: {
+        type: Boolean,
+        default: true,
+    },
+    nonResident: {
+        type: nonResidentSchema,
+        default: null,
     },
     businessName: {
         type: String,
@@ -42,7 +76,7 @@ const businessSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false
-    }
+    },
 });
 
 export default businessSchema;

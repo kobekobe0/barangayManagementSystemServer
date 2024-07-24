@@ -21,10 +21,6 @@ const indigencySchema = new Schema({
 }); 
 
 const buildingSchema = new Schema({
-    address: {
-        type: String,
-        required: true,
-    },
     location: {
         type: String,
         required: true,
@@ -126,11 +122,53 @@ const calamitySchema = new Schema({
     dateOccured: Date,
 });
 
+const excavationSchema = new Schema({
+    location: {
+        type: String,
+        required: true,
+    },
+    titleNumber: String,
+})
+
+const nameSchema = new Schema({
+    first: {
+        type: String,
+        required: true,
+    },
+    middle: {
+        type: String,
+        default: null,
+    },
+    last: {
+        type: String,
+        required: true,
+    },
+    suffix: {
+        type: String,
+        default: null,
+    },
+});
+
+const nonResidentSchema = new Schema({
+    name: nameSchema,
+    address: String,
+    dateOfBirth: Date,
+    placeOfBirth: String,
+});
+
+
 const formSchema = new Schema({
     residentID: {
         type: Schema.Types.ObjectId,
         ref: "Resident",
-        required: true,
+    },
+    isResident: {
+        type: Boolean,
+        default: true,
+    },
+    nonResident: {
+        type: nonResidentSchema,
+        default: null,
     },
     formType: {
         type: String,
@@ -141,7 +179,7 @@ const formSchema = new Schema({
         type: String,
         required: true,
     },
-    OTCNo: String,
+    CTCNo: String,
     ORNo: String,
     dateIssued: {
         type: Date,
@@ -167,7 +205,10 @@ const formSchema = new Schema({
         type: indigencySchema,
         default: undefined,
     },
-
+    excavation: {
+        type: excavationSchema,
+        default: undefined,
+    },
     building : {
         type: buildingSchema,
         default: undefined,
@@ -239,7 +280,8 @@ const formSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false,
-    }
+    },
+
 });
 
 export default formSchema;
