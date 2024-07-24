@@ -12,6 +12,9 @@ import cenusRouter from "./routes/Cenus.js";
 import { sanitizeObjectWithTrimMiddleware } from "./helper/sanitizeData.js";
 import receiptRouter from "./routes/Receipt.js";
 import businessRouter from "./routes/Business.js";
+import indigentRouter from "./routes/Indigent.js";
+import cedulaRouter from "./routes/Cedula.js";
+import formRouter from "./routes/Form.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,7 +25,7 @@ dotenv.config();
 connectToMongoDB();
 
 const app = express();
-app.use('/images', express.static(path.join(__dirname)));
+
 
 const port = process.env.PORT || 4000;
 app.use(express.json());
@@ -34,6 +37,7 @@ const corsOptions = {
         "http://localhost:3000/",
         "http://localhost:5173",
         "http://localhost:5173/",
+        "*"
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -41,6 +45,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use('/images', express.static(path.join(__dirname)));
 
 const io = createSocketServer(app, port);
 
@@ -63,6 +69,9 @@ app.use("/api/blocklog", blockLogRouter)
 app.use("/api/census", cenusRouter)
 app.use("/api/receipt", receiptRouter)
 app.use('/api/business', businessRouter)
+app.use('/api/indigent', indigentRouter)
+app.use('/api/cedula', cedulaRouter)
+app.use('/api/form', formRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
