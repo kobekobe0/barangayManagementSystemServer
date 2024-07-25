@@ -1,12 +1,10 @@
 import Form from '../../models/Form.js';
 import Business from '../../models/Business.js';
+import Resident from '../../models/Resident.js'
 
 import formDataToRender from '../../helper/formDataToRender.js';
 import generateForm from '../../helper/generateForm.js';
 import getExpirationDate from '../../helper/getExpirationDate.js';
-
-//TODO: in yrsOfResidency, change it to date //only the year and month
-//afected: createForm, getResident
 
 export const createForm = async (req, res) => {
     const form = req.body;
@@ -14,14 +12,32 @@ export const createForm = async (req, res) => {
         const formCount = await Form.countDocuments({ formType: form.formType });
         const paddedFormCount = String(formCount + 1).padStart(6, '0');
 
+        console.log(form)
+
         const expirationDate = getExpirationDate(form.formType);
 
-        const formattedExpirationDate = `${expirationDate.getMonth() + 1}-${expirationDate.getDate()}-${expirationDate.getFullYear()}`;
-        
+        let formattedExpirationDate = null;
+
+        if(expirationDate){
+            formattedExpirationDate = `${expirationDate.getMonth() + 1}-${expirationDate.getDate()}-${expirationDate.getFullYear()}`;
+        }
+
+        //update yrs of residency if business is not present
+
+        if(!form?.business){
+            if(form?.residentID){
+                if(form?.yrsOfResidency){
+                    await Resident.findByIdAndUpdate(form.residentID, { $set: { yrsOfResidency: form.yrsOfResidency } });
+                    console.log('Yrs of residency updated');
+                }
+            }
+            
+        }
+
         const newForm = await Form.create({
             ...form,
             formNumber: `${form.formType}-${paddedFormCount}`,
-            expirationDate: formattedExpirationDate
+            expirationDate: formattedExpirationDate,
         });
 
         const populatedForm = await Form.findById(newForm._id)
