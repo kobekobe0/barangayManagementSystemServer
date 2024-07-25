@@ -275,7 +275,7 @@ const formSchema = new Schema({
 
     expirationDate: {
         type: Date,
-        required: true,
+        default: null
     },
     isDeleted: {
         type: Boolean,
