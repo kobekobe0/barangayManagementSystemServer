@@ -50,7 +50,7 @@ const generateForm = async (data, formType) => {
                 }
             },
             getSize: function (img, tagValue, tagName) {
-                return [150, 150];
+                return [120, 120];
             }
         };
 
