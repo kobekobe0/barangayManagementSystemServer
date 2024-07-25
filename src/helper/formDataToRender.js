@@ -7,19 +7,19 @@ const formDataToRender = async (populatedForm) => {
         placeIssued: populatedForm.placeIssued.toUpperCase(),
         CTCNo: populatedForm.CTCNo || '',
         ORNo: populatedForm.ORNo || '',
-        expirationDate: new Date(populatedForm.expirationDate).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        expirationDate: populatedForm?.expirationDate ? new Date(populatedForm.expirationDate).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
         purpose: populatedForm.purpose || '',
         formNumber: populatedForm.formNumber,
         
         //business
-        businessName: populatedForm.business.businessName,
-        businessLocation: populatedForm.business.location,
-        nature: populatedForm.business.natureOfBusiness,
-        new: populatedForm.business.isNew ? 'New' : 'Renewal',
-        plateNumber: populatedForm.business.plateNumber || '',
-        cellphoneNumber: populatedForm.business.cellphoneNumber || '',
-        closed: populatedForm.business.isClosed ? 'Closed' : 'Open',
-        dateClosed: populatedForm.business.dateClosed ? new Date(populatedForm.business.dateClosed).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
+        businessName: populatedForm?.business?.businessName,
+        businessLocation: populatedForm?.business?.location,
+        nature: populatedForm?.business?.natureOfBusiness,
+        new: populatedForm?.business?.isNew ? 'New' : 'Renewal',
+        plateNumber: populatedForm?.business?.plateNumber || '',
+        cellphoneNumber: populatedForm?.business?.cellphoneNumber || '',
+        closed: populatedForm?.business?.isClosed ? 'Closed' : 'Open',
+        dateClosed: populatedForm?.business?.dateClosed ? new Date(populatedForm?.business?.dateClosed).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
 
         //employment
         employmentCompanyName: populatedForm?.employment?.companyName || '',
