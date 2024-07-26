@@ -69,10 +69,10 @@ const TODASchema = new Schema({
         required: true,
         default: 1,
     },
-    income: {
-        type: Number,
-        required: true,
-    },
+    plateNumber: {
+        type: String,
+        default: null,
+    },  
 })
 
 const reconstructionSchema = new Schema({
@@ -130,6 +130,17 @@ const excavationSchema = new Schema({
     titleNumber: String,
 })
 
+const ITRSchema = new Schema({
+    incomeMin: {
+        type: Number,
+        default: 0,
+    },
+    incomeMax: {
+        type: Number,
+        default: 0,
+    },
+});
+
 const nameSchema = new Schema({
     first: {
         type: String,
@@ -183,8 +194,7 @@ const formSchema = new Schema({
     ORNo: String,
     dateIssued: {
         type: Date,
-        required: true,
-        default: Date.now,
+        default: null
     },
     placeIssued: {
         type: String,
@@ -267,12 +277,20 @@ const formSchema = new Schema({
         default: undefined,
     },
 
+    ITR: {
+        type: ITRSchema,
+        default: undefined,
+    },
+
     formNumber: {
         type: String,
         required: true,
         unique: true,
     },
-
+    formDateIssued: {
+        type: Date,
+        default: Date.now,
+    },
     expirationDate: {
         type: Date,
         default: null

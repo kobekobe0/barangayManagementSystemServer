@@ -15,6 +15,9 @@ const TEMPLATE_PATHS = {
     SLP: `${basePath}soloParent.docx`,
     TODA: `${basePath}toda.docx`,
     ZC: `${basePath}zoningClearance.docx`,
+    ITR: `${basePath}itr.docx`,
+    WP: `${basePath}waterPermit.docx`,
+    UEC: `${basePath}unemployment.docx`,
 }
 
 export default TEMPLATE_PATHS;

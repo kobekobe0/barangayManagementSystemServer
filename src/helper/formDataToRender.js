@@ -3,13 +3,14 @@ const formDataToRender = async (populatedForm) => {
     //location = entity address (e.g. business address)
     let dataToRender = {
         //default values in a form
-        dateIssued: new Date(populatedForm.dateIssued).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        dateIssued: populatedForm?.dateIssued ? new Date(populatedForm.dateIssued).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '',
         placeIssued: populatedForm.placeIssued.toUpperCase(),
         CTCNo: populatedForm.CTCNo || '',
         ORNo: populatedForm.ORNo || '',
         expirationDate: populatedForm?.expirationDate ? new Date(populatedForm.expirationDate).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
         purpose: populatedForm.purpose || '',
         formNumber: populatedForm.formNumber,
+        formDateIssued: populatedForm.dateIssued ? new Date(populatedForm.dateIssued).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
         
         //business
         businessName: populatedForm?.business?.businessName,
@@ -55,6 +56,7 @@ const formDataToRender = async (populatedForm) => {
         todaChassisNumber: populatedForm?.TODA?.chassisNumber || '',
         todaNumberOfUnits: populatedForm?.TODA?.numberOfUnits || '',
         todaIncome: populatedForm?.TODA?.income || '',
+        todaPlateNumber: populatedForm?.TODA?.plateNumber || '',
 
         //reconstruction
         reconstructionLocation: populatedForm?.reconstruction?.location || '',
@@ -80,14 +82,18 @@ const formDataToRender = async (populatedForm) => {
         //coHabitation
         coHabitationResident1: populatedForm?.coHabitation?.resident1 || '',
         coHabitationResident2: populatedForm?.coHabitation?.resident2 || '',
-        dateOfCoHabitation: populatedForm?.coHabitation?.dateOfCoHabitation ? new Date(populatedForm?.coHabitation?.dateOfCoHabitation).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
+        dateOfCohabitation: populatedForm?.coHabitation?.dateOfCoHabitation ? new Date(populatedForm?.coHabitation?.dateOfCoHabitation).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
         coHabitationBlotterEntryNumber: populatedForm?.coHabitation?.blotterEntryNumber || '',
         coHabitationDateOfBlotter: populatedForm?.coHabitation?.dateOfBlotter ? new Date(populatedForm?.coHabitation?.dateOfBlotter).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
-        coHabitationNumberOfChildren: populatedForm?.coHabitation?.numberOfChildren || '',
+        coHabitationNumberOfChildren: populatedForm?.coHabitation?.numberOfChildren,
 
         //calamity
         causeOfCalamity: populatedForm?.calamity?.causeOfCalamity || '',
         calamityDateOccured: populatedForm?.calamity?.dateOccured ? new Date(populatedForm?.calamity?.dateOccured).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
+    
+        //ITR
+        ITRIncomeMin: populatedForm?.ITR?.incomeMin || '',
+        ITRIncomeMax: populatedForm?.ITR?.incomeMax || '',
     }
 
     if(populatedForm.isResident){
