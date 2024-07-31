@@ -2,7 +2,7 @@ const getExpirationDate = (formType) => {
     let expirationDate = new Date();
 
     const noExpiry = ['IC', 'CB', 'SWD'];
-    const sixMonths = ['BC', 'BRC', 'BDC', 'ECC', 'FC', 'RC', 'PAO', 'UEC', 'WP', 'EC']
+    const sixMonths = ['BC', 'BRC', 'BDC', 'ECC', 'FC', 'RC', 'PAO', 'UEC', 'WP', 'EC', 'EX']
     const oneYear = ['SLP', 'TODA', 'LBC', 'ITR']
     const threeMonts = ['CH', 'NRC', 'CL']
 

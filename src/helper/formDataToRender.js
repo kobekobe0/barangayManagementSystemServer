@@ -10,8 +10,8 @@ const formDataToRender = async (populatedForm) => {
         expirationDate: populatedForm?.expirationDate ? new Date(populatedForm.expirationDate).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
         purpose: populatedForm.purpose || '',
         formNumber: populatedForm.formNumber,
-        formDateIssued: populatedForm.dateIssued ? new Date(populatedForm.dateIssued).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
-        
+        formDateIssued: populatedForm.formDateIssued ? new Date(populatedForm.formDateIssued).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
+
         //business
         businessName: populatedForm?.business?.businessName,
         businessLocation: populatedForm?.business?.location,
@@ -30,8 +30,8 @@ const formDataToRender = async (populatedForm) => {
         dateLastEmployed: populatedForm?.employment?.dateLastEmployed ? new Date(populatedForm.employment.dateLastEmployed).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
 
         //indigency
-        indigencyRelationToBeneficiary: populatedForm?.indigency?.relationToBeneficiary || '',
-        indigencyBeneficiaryName: populatedForm?.indigency?.beneficiaryName || '',
+        indigencyRelationToBeneficiary: populatedForm?.indigency?.relationToBeneficiary || '', //relation sa naka pangalan
+        indigencyBeneficiaryName: populatedForm?.indigency?.beneficiaryName || '', //kung sino nag reques
 
         //excavation
         excavationLocation: populatedForm?.excavation?.location || '',
@@ -120,6 +120,14 @@ const formDataToRender = async (populatedForm) => {
         dataToRender = {
             ...dataToRender,
             image: `../../${populatedForm.residentID.picture}`
+        }
+    }
+
+    if(populatedForm.image){
+        console.log('Image:', populatedForm.image);
+        dataToRender = {
+            ...dataToRender,
+            image: `../../${populatedForm.image}`
         }
     }
 

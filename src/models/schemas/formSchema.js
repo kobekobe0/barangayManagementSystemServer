@@ -21,34 +21,18 @@ const indigencySchema = new Schema({
 }); 
 
 const buildingSchema = new Schema({
-    location: {
-        type: String,
-        required: true,
-    },
+    location: String,
     titleNumber: String,
 })
 
 const electricalSchema = new Schema({
-    address: {
-        type: String,
-        required: true,
-    },
-    location: {
-        type: String,
-        required: true,
-    },
+    location: String,
     titleNumber: String,
 })
 
 const fencingSchema = new Schema({
-    address: {
-        type: String,
-        required: true,
-    },
-    location: {
-        type: String,
-        required: true,
-    },
+    address: String,
+    location: String
 })
 
 const TODASchema = new Schema({
@@ -179,6 +163,10 @@ const formSchema = new Schema({
     },
     nonResident: {
         type: nonResidentSchema,
+        default: null,
+    },
+    image: {
+        type: String,
         default: null,
     },
     formType: {

@@ -2,6 +2,8 @@ import IndigentHolder from "../../models/IndigentHolder.js";
 import Indigent from "../../models/Indigent.js";
 import Resident from "../../models/Resident.js";
 import mongoose from "mongoose";
+import formatIndigent from "../../helper/formatDataIndigent.js";
+import generateForm from "../../helper/generateForm.js";
 
 export const getLatestIndigentHolder = async (req, res) => {
     try {
@@ -27,6 +29,25 @@ export const getLatestIndigentHolder = async (req, res) => {
         return res.status(409).json({
             error: error.message,
             message: "Failed to get Indigent Holder"
+        })
+    }
+}
+
+export const getIndigentHolders = async (req, res) => {
+    try {
+        const indigentHolders = await IndigentHolder.find().sort({createdAt: -1})
+        return res.status(200).json({
+            data: indigentHolders
+        })
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to get Indigent Holders",
+            function: "getIndigentHolders"
+        })
+        return res.status(409).json({
+            error: error.message,
+            message: "Failed to get Indigent Holders"
         })
     }
 }
@@ -177,6 +198,60 @@ export const searchIndigent = async (req, res) => {
 
         return res.status(200).json({
             data: indigents
+        })
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to get Indigents",
+            function: "getIndigents"
+        })
+        return res.status(409).json({
+            error: error.message,
+            message: "Failed to get Indigents"
+        })
+    }
+}
+
+
+export const getResidentIndigentHistory = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const indigents = await Indigent.find({patient: id})
+            .sort({ approvedAt: -1 })
+            .populate('patient', 'name');
+
+        return res.status(200).json({
+            data: indigents
+        })
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to get Indigents",
+            function: "getIndigents"
+        })
+        return res.status(409).json({
+            error: error.message,
+            message: "Failed to get Indigents"
+        })
+    }
+}
+
+
+export const printIndigents = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const indigent = await Indigent.find({
+            holderID: id 
+        })
+        .sort({approvedAt: -1})
+        .populate('patient', 'name')
+
+        await formatIndigent(indigent).then(async (data) => {
+            const docxFile = await generateForm({indigents: data.arr, total: data.totalAmount}, 'indigent');
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            res.setHeader('Content-Disposition', `attachment; filename=${id}.docx`);
+            return res.send(docxFile);
         })
     } catch (error) {
         console.log({

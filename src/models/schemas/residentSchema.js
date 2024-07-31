@@ -112,6 +112,10 @@ const residentSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    age: {
+        type: Number,
+        default: 0,
+    }
 });
 
 export default residentSchema;

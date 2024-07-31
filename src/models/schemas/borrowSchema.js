@@ -63,11 +63,14 @@ const borrowSchema = new Schema({
     vehicle: {
         type: String,
         required: true,
-    }
+    },
+    numberOfPassengers: {
+        type: Number,
+        required: true,
+        default: 1,
+    },
 });
 
 borrowSchema.plugin(mongoosePaginate);
 
-const Borrow = mongoose.model('Borrow', borrowSchema);
-
-export default Borrow;
+export default borrowSchema;

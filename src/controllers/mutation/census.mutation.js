@@ -32,6 +32,45 @@ export const createCensus = async (req, res) => {
     }
 }
 
+export const deleteHousehold = async (req, res) => {
+    //delete household and all families associated with it
+
+    const householdID = req.params.id;
+
+    try {
+        const household = await Household.findById(householdID)
+        if(!household) {
+            return res.status(404).json({
+                message: "Household not found"
+            });
+        }
+        //delete all families associated with the household
+        const families = await Family.find({ householdID });
+        families.forEach(async (family) => {
+            await Family.findByIdAndDelete(family._id);
+        })
+
+        //delete household
+        await Household.findByIdAndDelete(householdID);
+
+        return res.status(200).json({
+            message: "Household deleted successfully",
+            success: true
+        });
+
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to delete household",
+            function: "deleteHousehold"
+        });
+        return res.status(409).json({
+            error: error.message,
+            message: "Failed to delete household"
+        });
+    }   
+}
+
 
 export const createHousehold = async (req, res) => {
     let { address } = req.body;
@@ -260,7 +299,7 @@ export const deleteFamily = async (req, res) => {
 
 export const saveMember = async (req, res) => {
     const familyID = req.params.id;
-    const { member, address } = req.body;
+    const { member, address, householdID } = req.body;
     try {
         const family = await Family.findById(familyID).populate('members');
         if(!family) {

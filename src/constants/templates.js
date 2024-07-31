@@ -18,6 +18,10 @@ const TEMPLATE_PATHS = {
     ITR: `${basePath}itr.docx`,
     WP: `${basePath}waterPermit.docx`,
     UEC: `${basePath}unemployment.docx`,
+    ECC: `${basePath}electricalClearance.docx`,
+    receipt: `${basePath}receiptTemplate.docx`,
+    cedula: `${basePath}cedulaTemplate.docx`,
+    indigent: `${basePath}indigent.docx`,
 }
 
 export default TEMPLATE_PATHS;

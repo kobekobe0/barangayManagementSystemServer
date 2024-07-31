@@ -1,53 +1,55 @@
 import Borrow from "../../models/Borrow.js";
 
 export const getBorrows = async (req, res) => {
-    const { page = 1, limit = 20, vehicle } = req.query;
-
+    const { page = 1, limit = 20, vehicle, first="", last="", middle="" } = req.query;
     try {
-        // Build query
-        let query = {};
+        let matchStage = {};
+
         if (vehicle) {
-            query.vehicle = vehicle;
+            matchStage.vehicle = { $regex: vehicle, $options: 'i' };
         }
 
-        // Pagination options
-        const options = {
-            page: parseInt(page, 10),
-            limit: parseInt(limit, 10),
-            sort: { dateBorrowed: -1 } // Sort by dateBorrowed in descending order
-        };
+        if (first || last || middle) {
+            matchStage.$or = [];
+            if (first) {
+                matchStage.$or.push({ "residentID.name.first": { $regex: first, $options: 'i' } });
+                matchStage.$or.push({ "nonResident.name.first": { $regex: first, $options: 'i' } });
+            }
+            if (middle) {
+                matchStage.$or.push({ "residentID.name.middle": { $regex: middle, $options: 'i' } });
+                matchStage.$or.push({ "nonResident.name.middle": { $regex: middle, $options: 'i' } });
+            }
+            if (last) {
+                matchStage.$or.push({ "residentID.name.last": { $regex: last, $options: 'i' } });
+                matchStage.$or.push({ "nonResident.name.last": { $regex: last, $options: 'i' } });
+            }
+        }
 
-        // Get paginated results
-        const result = await Borrow.paginate(query, options);
+        const skip = (parseInt(page) - 1) * parseInt(limit);
 
-        // Get total number of borrows
-        const totalBorrows = await Borrow.countDocuments(query);
+        const borrows = await Borrow.aggregate([
+            {
+                $lookup: {
+                    from: "residents",
+                    localField: "residentID",
+                    foreignField: "_id",
+                    as: "residentID"
+                }
+            },
+            {$unwind: {path: "$residentID", preserveNullAndEmptyArrays: true}},
+            {$match: matchStage},
+            {$sort: {dateBorrowed: -1}},
+        ])
+        .skip(skip)
+        .limit(parseInt(limit));
 
-        // Aggregate by vehicle
-        const aggregateResult = await Borrow.aggregate([
-            { $group: { _id: "$vehicle", count: { $sum: 1 } } }
-        ]);
-
-        // Show number per vehicle
-        const vehicleCounts = aggregateResult.reduce((acc, curr) => {
-            acc[curr._id] = curr.count;
-            return acc;
-        }, {});
-
-        res.status(200).json({
-            totalBorrows,
-            vehicleCounts,
-            borrows: result.docs,
-            totalPages: result.totalPages,
-            currentPage: result.page
+        return res.status(200).json({
+            borrows,
+            message: "Borrows found",
         });
+
     } catch (error) {
         console.error('Error fetching borrows:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
-
-const getNumbers = async (req, res) => {
-    
-}

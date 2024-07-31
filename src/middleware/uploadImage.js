@@ -17,7 +17,7 @@ const processImage = async (req, res, next) => {
 
     const file = req.file;
     const dir = './src/images/'
-    const filename = req.params.id + '_pfp.png';
+    const filename = req.params.id ? req.params.id + '_pfp.png' : new Date().getTime() + '_pfp.png';
     const outputPath = path.join(dir, filename);
 
     if (!fs.existsSync(dir)) {

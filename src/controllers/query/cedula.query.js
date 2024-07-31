@@ -1,3 +1,5 @@
+import formatCedula from "../../helper/formatDataCedula.js";
+import generateForm from "../../helper/generateForm.js";
 import Cedula from "../../models/Cedula.js";
 
 export const getCedula = async (req, res) => {
@@ -67,6 +69,38 @@ export const getCedulas = async (req, res) => {
         return res.status(409).json({
             error: error.message,
             message: "Failed to get cedulas"
+        });
+    }
+}
+
+
+export const printCedula = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const cedula = await Cedula.findById(id);
+        if(!cedula) {
+            return res.status(404).json({
+                message: "Cedula not found"
+            });
+        }
+
+        await formatCedula(cedula).then(async (data) => {
+            console.log('Data to render:', data);
+            const docxFile = await generateForm(data, 'cedula');
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            res.setHeader('Content-Disposition', `attachment; filename=${cedula.bookletNumber}.docx`);
+            return res.send(docxFile);
+        });
+    } catch (error) {
+        console.log({
+            error: error.message,
+            message: "Failed to get cedula",
+            function: "getCedula"
+        });
+        return res.status(409).json({
+            error: error.message,
+            message: "Failed to get cedula"
         });
     }
 }

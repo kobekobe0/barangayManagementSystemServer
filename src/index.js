@@ -15,6 +15,8 @@ import businessRouter from "./routes/Business.js";
 import indigentRouter from "./routes/Indigent.js";
 import cedulaRouter from "./routes/Cedula.js";
 import formRouter from "./routes/Form.js";
+import borrowRouter from "./routes/Borrow.js";
+import censusReportRouter from "./routes/CensusReport.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -72,6 +74,8 @@ app.use('/api/business', businessRouter)
 app.use('/api/indigent', indigentRouter)
 app.use('/api/cedula', cedulaRouter)
 app.use('/api/form', formRouter)
+app.use('/api/borrow', borrowRouter)
+app.use('/api/censusReport', censusReportRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
