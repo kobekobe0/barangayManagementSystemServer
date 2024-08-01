@@ -42,6 +42,7 @@ const corsOptions = {
         "http://localhost:3000",
         "http://localhost:3000/",
         "http://localhost:5173",
+	"http://192.168.100.104",
         "http://localhost:5173/",
         "*"
     ],
