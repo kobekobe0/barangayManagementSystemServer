@@ -83,13 +83,19 @@ app.use('/api/censusReport', censusReportRouter)
 
 //shutdown
 app.post('/api/shutdown', (req, res) => {
-    exec('sudo shutdown -h now', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error executing shutdown: ${error}`);
+    console.log('Shutting down server');
+    try{
+        exec('sudo shutdown -h now', (error, stdout, stderr) => {
+            if (error) {
+              console.error(`Error executing shutdown: ${error}`);
+              return res.status(500).json({ message: 'Failed to shut down server' });
+            }
+            res.status(200).json({ message: 'Server is shutting down' });
+          });
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({ message: 'Failed to shut down server' });
-      }
-      res.status(200).json({ message: 'Server is shutting down' });
-    });
+    }
 });
 
 app.post('/api/backup', async (req, res) => {
