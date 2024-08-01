@@ -17,6 +17,10 @@ import cedulaRouter from "./routes/Cedula.js";
 import formRouter from "./routes/Form.js";
 import borrowRouter from "./routes/Borrow.js";
 import censusReportRouter from "./routes/CensusReport.js";
+import { exec } from "child_process";
+
+import mongoose from "mongoose";
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -76,6 +80,67 @@ app.use('/api/cedula', cedulaRouter)
 app.use('/api/form', formRouter)
 app.use('/api/borrow', borrowRouter)
 app.use('/api/censusReport', censusReportRouter)
+
+//shutdown
+app.post('/api/shutdown', (req, res) => {
+    exec('sudo shutdown -h now', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing shutdown: ${error}`);
+        return res.status(500).json({ message: 'Failed to shut down server' });
+      }
+      res.status(200).json({ message: 'Server is shutting down' });
+    });
+});
+
+app.post('/api/backup', async (req, res) => {
+    try {
+        // Get all collections
+        const collections = await mongoose.connection.db.listCollections().toArray();
+    
+        // Connect to remote DB
+        const remoteDB = await mongoose.createConnection(process.env.BACKUP_PATH, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }).asPromise();
+    
+        // Drop all collections in remote DB
+        for (let collection of collections) {
+            try {
+                await remoteDB.db.dropCollection(collection.name);
+            } catch (error) {
+                // Log error but continue to backup other collections
+                console.error(`Failed to drop collection ${collection.name}: ${error}`);
+            }
+        }
+    
+        // Copy all collections
+        for (let collection of collections) {
+            const cursor = mongoose.connection.db.collection(collection.name).find();
+            const data = await cursor.toArray();
+            
+            // Insert data only if it's not empty
+            if (data.length > 0) {
+                try {
+                    await remoteDB.db.collection(collection.name).insertMany(data);
+                } catch (error) {
+                    console.error(`Failed to insert data into collection ${collection.name}: ${error}`);
+                }
+            }
+        }
+    
+        // Close remote DB
+        await remoteDB.close();
+    
+        return res.status(200).json({ message: 'Database backup successful' });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Failed to backup database' });
+    }
+});
+
+
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

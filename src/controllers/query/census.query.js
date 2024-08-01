@@ -84,7 +84,16 @@ export const getHouseholds = async (req, res) => {
                 }
             },
             { $unwind: "$head" },
-            { $match: match }
+            { $match: match },
+            {
+                $sort: {
+                    "head.name.last": 1
+                }
+            },
+            //limit the number of results
+            {
+                $limit: 50
+            }
         ]);
         
         return res.status(200).json({
