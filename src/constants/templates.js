@@ -10,7 +10,7 @@ const TEMPLATE_PATHS = {
     EX: `${basePath}excavationClearance.docx`,
     FC: `${basePath}fencingClearance.docx`,
     IC: `${basePath}indigencyCertification.docx`,
-    LBC: `${basePath}lateBCRegistration.docx`,
+    LBC: `${basePath}lateBC.docx`,
     NRC: `${basePath}nonResidentCertification.docx`,
     SLP: `${basePath}soloParent.docx`,
     TODA: `${basePath}toda.docx`,
@@ -22,6 +22,7 @@ const TEMPLATE_PATHS = {
     receipt: `${basePath}receiptTemplate.docx`,
     cedula: `${basePath}cedulaTemplate.docx`,
     indigent: `${basePath}indigent.docx`,
+    FT: `${basePath}firstTime.docx`,
 }
 
 export default TEMPLATE_PATHS;
