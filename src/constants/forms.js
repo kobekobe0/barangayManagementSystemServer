@@ -23,7 +23,8 @@ const FORMTYPES = {
     "TODACertification": "TODA",
     "UnemploymentCertification": "UEC",
     "WaterPermit": "WP",
-    "ZoningClearance": "ZC"
+    "ZoningClearance": "ZC",
+    "FirstTimeJobSeeker": 'FT'
 };
 
 export default FORMTYPES;

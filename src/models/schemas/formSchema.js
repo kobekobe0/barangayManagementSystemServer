@@ -90,6 +90,31 @@ const lateBCSchema = new Schema({
         type: String,
         required: true,
     },
+    fatherOccupation: {
+        type: String,
+    }, 
+    motherOccupation: {
+        type: String,
+    },
+    religion: {
+        type: String,
+    },
+    isMerried: {
+        type: Boolean,
+        default: false,
+    },
+    nameOfChild: {
+        type: String,
+    },
+    dateOfBirth: {
+        type: Date,
+    },
+    placeOfBirth: {
+        type: String,
+    },
+    school: {
+        type: String,
+    },
 });
 
 const coHabitationSchema = new Schema({
