@@ -102,6 +102,17 @@ const formDataToRender = async (populatedForm) => {
         //ITR
         ITRIncomeMin: populatedForm?.ITR?.incomeMin || '',
         ITRIncomeMax: populatedForm?.ITR?.incomeMax || '',
+
+        firstTimeAge: populatedForm?.residentID?.dateOfBirth ? (() => {
+            const birthDate = new Date(populatedForm.residentID.dateOfBirth);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        })() : 'N/A',
     }
 
     if(populatedForm.isResident){
