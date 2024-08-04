@@ -76,11 +76,11 @@ const formDataToRender = async (populatedForm) => {
         lipatBahayDestination: populatedForm?.lipatBahay?.destination || '',
 
         //lateBC
-        lateBCMotherMaidenName: populatedForm?.lateBC?.mother || '',
+        lateBCMotherName: populatedForm?.lateBC?.mother || '',
         lateBCFatherName: populatedForm?.lateBC?.father || '',
         lateBCFatherOccupation: populatedForm?.lateBC?.fatherOccupation || '',
         lateBCMotherOccupation: populatedForm?.lateBC?.motherOccupation || '',
-        lateBCReligion: populatedForm?.lateBC?.religion || '',
+        religion: populatedForm?.lateBC?.religion || '',
         lateBCIsMerried: populatedForm?.lateBC?.isMerried ? 'Yes' : 'No',
         lateBCNameOfTheChild: populatedForm?.lateBC?.nameOfChild || '',
         lateBCDateOfBirth: populatedForm?.lateBC?.dateOfBirth ? new Date(populatedForm?.lateBC?.dateOfBirth).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A',
