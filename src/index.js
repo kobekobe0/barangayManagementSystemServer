@@ -44,7 +44,8 @@ const corsOptions = {
         "http://localhost:5173",
 	"http://192.168.100.104",
         "http://localhost:5173/",
-        "*"
+        "http://192.168.1.242",
+	"*"
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
