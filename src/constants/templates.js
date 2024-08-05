@@ -23,6 +23,7 @@ const TEMPLATE_PATHS = {
     cedula: `${basePath}cedulaTemplate.docx`,
     indigent: `${basePath}indigent.docx`,
     FT: `${basePath}firstTime.docx`,
+    ID: `${basePath}id.docx`,
 }
 
 export default TEMPLATE_PATHS;

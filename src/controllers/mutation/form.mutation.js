@@ -5,6 +5,7 @@ import Resident from '../../models/Resident.js'
 import formDataToRender from '../../helper/formDataToRender.js';
 import generateForm from '../../helper/generateForm.js';
 import getExpirationDate from '../../helper/getExpirationDate.js';
+import formatID from '../../helper/formDataID.js'
 
 function updateField(form, fieldName) {
     if (form[fieldName]) {
@@ -112,6 +113,63 @@ export const rePrintForm = async (req, res) => {
         return res.status(409).json({ 
             error: error.message,
             message: "Failed to reprint form"
+        });
+    }
+}
+
+export const createID = async (req, res) => {
+    const id = req.params.id;
+    try{
+        const resident = await Resident.findByIdAndUpdate(id, {
+            $set: {
+                IDs: {
+                    SSS: req.body.IDs.SSS,
+                    TIN: req.body.IDs.TIN,
+                    PAGIBIG: req.body.IDs.PAGIBIG,
+                    PhilHealth: req.body.IDs.PhilHealth
+                },
+                voterInfo: {
+                    precinctNumber: req.body.voterInfo.precinctNumber,
+                    voterID: req.body.voterInfo.voterID,
+                },
+                bloodType: req.body.bloodType,
+                dateOfBirth: req.body.dateOfBirth,
+                name: {
+                    first: req.body.name.first,
+                    middle: req.body.name.middle,
+                    last: req.body.name.last,
+                    suffix: req.body.name.suffix
+                },
+                address: {
+                    streetName: req.body.address.streetName,
+                    apartment: req.body.address.apartment,
+                    householdNumber: req.body.address.householdNumber,
+                    sitio: req.body.address.sitio
+                },
+                emergencyContact: {
+                    name: req.body.emergencyContact.name,
+                    mobileNumber: req.body.emergencyContact.mobileNumber,
+                    address: req.body.emergencyContact.address
+                },
+            }
+        }, { new: true})
+        
+        const dataToRender = await formatID(resident).then(async (data) => {
+            console.log('Data to render:', data);
+            const docxFile = await generateForm(data, 'ID');
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            res.setHeader('Content-Disposition', `attachment; filename=${resident._id}.docx`);   
+            return res.send(docxFile);
+        });
+    }catch(error){
+        console.log({
+            error: error.message,
+            message: "Failed to create ID",
+            function: "createID"
+        })
+        return res.status(409).json({ 
+            error: error.message,
+            message: "Failed to create ID"
         });
     }
 }
