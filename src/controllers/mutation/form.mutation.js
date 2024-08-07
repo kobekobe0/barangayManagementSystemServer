@@ -123,33 +123,33 @@ export const createID = async (req, res) => {
         const resident = await Resident.findByIdAndUpdate(id, {
             $set: {
                 IDs: {
-                    SSS: req.body.IDs.SSS,
-                    TIN: req.body.IDs.TIN,
-                    PAGIBIG: req.body.IDs.PAGIBIG,
-                    PhilHealth: req.body.IDs.PhilHealth
+                    SSS: req?.body?.IDs?.SSS,
+                    TIN: req?.body?.IDs?.TIN,
+                    PAGIBIG: req?.body?.IDs?.PAGIBIG,
+                    PhilHealth: req?.body?.IDs?.PhilHealth
                 },
                 voterInfo: {
-                    precinctNumber: req.body.voterInfo.precinctNumber,
-                    voterID: req.body.voterInfo.voterID,
+                    precinctNumber: req?.body?.voterInfo?.precinctNumber,
+                    voterID: req?.body?.voterInfo?.voterID,
                 },
-                bloodType: req.body.bloodType,
-                dateOfBirth: req.body.dateOfBirth,
+                bloodType: req?.body?.bloodType,
+                dateOfBirth: req?.body?.dateOfBirth,
                 name: {
-                    first: req.body.name.first,
-                    middle: req.body.name.middle,
-                    last: req.body.name.last,
-                    suffix: req.body.name.suffix
+                    first: req?.body?.name?.first,
+                    middle: req?.body?.name?.middle,
+                    last: req?.body?.name?.last,
+                    suffix: req?.body?.name?.suffix
                 },
                 address: {
-                    streetName: req.body.address.streetName,
-                    apartment: req.body.address.apartment,
-                    householdNumber: req.body.address.householdNumber,
-                    sitio: req.body.address.sitio
+                    streetName: req?.body?.address?.streetName,
+                    apartment: req?.body?.address?.apartment,
+                    householdNumber: req?.body?.address?.householdNumber,
+                    sitio: req?.body?.address?.sitio
                 },
                 emergencyContact: {
-                    name: req.body.emergencyContact.name,
-                    mobileNumber: req.body.emergencyContact.mobileNumber,
-                    address: req.body.emergencyContact.address
+                    name: req?.body?.emergencyContact?.name,
+                    mobileNumber: req?.body?.emergencyContact?.mobileNumber,
+                    address: req?.body?.emergencyContact?.address
                 },
             }
         }, { new: true})
