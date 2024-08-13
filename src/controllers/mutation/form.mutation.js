@@ -15,11 +15,13 @@ function updateField(form, fieldName) {
 
 export const createForm = async (req, res) => {
     const form = req.body;
-    console.log(form)
+    console.log("FORMS ", form)
     try{
         const formCount = await Form.countDocuments({ formType: form.formType });
         const paddedFormCount = String(formCount + 1).padStart(6, '0');
         let picturePath = null;
+
+        console.log("FORM: ", form?.nonResident)
         
         if(form?.nonResident){
             updateField(form, 'nonResident');
@@ -53,8 +55,9 @@ export const createForm = async (req, res) => {
                     console.log('Yrs of residency updated');
                 }
             }
-            
         }
+
+        console.log('Form:', form);
 
         const newForm = await Form.create({
             ...form,

@@ -7,7 +7,7 @@ const formRouter = express.Router();
 
 formRouter.post('/', createForm);
 formRouter.post('/:id', createID);
-formRouter.post('/non-resident', uploadSingleImage, processImage, createForm);
+formRouter.post('/create/non-resident', uploadSingleImage, processImage, createForm);
 
 formRouter.get('/resident/:id', getResidentForms);
 formRouter.get('/', getForms);
