@@ -48,8 +48,7 @@ const employmentSchema = new Schema({
 const residentSchema = new Schema({
     name: nameSchema,
     dateOfBirth: {
-        type: Date,
-        required: true,
+        type: Date
     },
     dateOfDeath: Date,
     placeOfBirth: String,

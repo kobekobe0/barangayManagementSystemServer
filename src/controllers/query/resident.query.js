@@ -49,7 +49,7 @@ export const getResidents = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'blockedlogs',
+                    from: 'blockedLogs',
                     localField: 'blocked',
                     foreignField: '_id',
                     as: 'blockedDetails'
