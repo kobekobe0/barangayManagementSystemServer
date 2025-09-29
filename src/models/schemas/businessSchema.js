@@ -77,6 +77,6 @@ const businessSchema = new Schema({
         type: Boolean,
         default: false
     },
-});
+},{timestamps: true});
 
 export default businessSchema;

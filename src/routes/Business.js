@@ -1,12 +1,13 @@
 import express from 'express'
 import { createBusiness, deleteBusiness, updateBusiness } from '../controllers/mutation/business.mutation.js'
-import { getAllBusinesses, getBusiness, getBusinessNumbers } from '../controllers/query/business.query.js'
+import { getAllBusinesses, getBusiness, getBusinessNumbers, printBusinesses } from '../controllers/query/business.query.js'
 
 const businessRouter = express.Router()
 
 businessRouter.post('/create', createBusiness)
 
 businessRouter.get('/', getAllBusinesses)
+businessRouter.get('/print', printBusinesses)
 businessRouter.get('/get-by-id/:id', getBusiness)
 businessRouter.get('/statistics', getBusinessNumbers)
 
